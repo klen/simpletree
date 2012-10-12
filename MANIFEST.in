@@ -1,0 +1,2 @@
+recursive-include simpletree *
+exclude *.pyc *.orig
