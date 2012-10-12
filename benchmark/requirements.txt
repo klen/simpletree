@@ -1,0 +1,4 @@
+Django>=1.4
+django-mptt>=0.5.4
+django-treebeard>=1.61
+git+git://github.com/klen/simpletree.git#egg=simpletree

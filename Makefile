@@ -1,3 +1,5 @@
+ENVBIN=$(CURDIR)/.env/bin
+PIP=$(ENVBIN)/pip
 MODULE=simpletree
 SPHINXBUILD=sphinx-build
 ALLSPHINXOPTS= -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
@@ -8,6 +10,15 @@ BUILDDIR=_build
 # target: help - Display callable targets
 help:
 	@egrep "^# target:" [Mm]akefile
+
+.env: benchmark/requirements.txt
+	virtualenv --no-site-packages .env
+	$(PIP) install -M -r benchmark/requirements.txt
+
+.PHONY: benchmark
+# target: benchmark - Run benchmark
+benchmark: .env
+	@echo 111
 
 .PHONY: clean
 # target: clean - Display callable targets
