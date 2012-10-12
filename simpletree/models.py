@@ -39,6 +39,8 @@ class NodeMeta(models.Model.__metaclass__):
                     related_name='_parent_links'),
                 depth=models.PositiveIntegerField(default=0),
                 Meta=RelationMeta,
+                __repr__=lambda s: "{0}/{1} [{2}]".format(
+                    s.parent_id, s.child_id, s.depth)
             ))
 
         class_dict['{0}_child_set'.format(class_name.lower())] = models.ManyToManyField(
@@ -112,6 +114,11 @@ class Node(models.Model):
             table=qn(self._relation_model._meta.db_table),
             parent=self.parent_id,
             child=self.pk)
+
+    def get_tree(self):
+        return self.__class__.objects.filter(
+            models.Q(_child_links__child=self) | models.Q(_parent_links__parent=self)
+        ).distinct()
 
 
 # pymode:lint_ignore=E1123

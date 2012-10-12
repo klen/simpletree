@@ -1,19 +1,31 @@
 from django.test import TestCase
 from milkman.dairy import milkman
+from .models import Page
 
 
 class TreeTestCase(TestCase):
 
+    def setUp(self):
+        """ Create test tree
+        """
+        root1 = milkman.deliver(Page)
+        page11 = milkman.deliver(Page, parent=root1)
+        page12 = milkman.deliver(Page, parent=root1)
+        page111 = milkman.deliver(Page, parent=page11)
+        page1111 = milkman.deliver(Page, parent=page111)
+        page1112 = milkman.deliver(Page, parent=page111)
+
+        self.__dict__.update(locals())
+
     def test_models(self):
-        from .models import Page
-        self.assertFalse(Page.objects.count())
+        self.assertEqual(Page.objects.count(), 6)
 
-        root = milkman.deliver(Page)
-        page11 = milkman.deliver(Page, parent=root)
-        page12 = milkman.deliver(Page, parent=root)
-        page21 = milkman.deliver(Page, parent=page11)
-        page31 = milkman.deliver(Page, parent=page21)
+    def test_get_root_nodes(self):
+        self.assertEqual(list(Page.objects.filter(parent=None)), [self.root1])
 
-        # Move tree
-        page21.parent = page12
-        page21.save()
+    def test_get_tree(self):
+        with self.assertNumQueries(1):
+            pages = self.page11.get_tree()
+            self.assertEqual(len(pages), 5)
+
+# pymode:lint_ignore=F0401,W0612,W806
