@@ -18,7 +18,7 @@ help:
 .PHONY: benchmark
 # target: benchmark - Run benchmark
 benchmark: .env
-	@echo 111
+	python benchmark/app.py
 
 .PHONY: clean
 # target: clean - Display callable targets

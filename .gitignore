@@ -4,6 +4,7 @@ dist
 docs/_build
 *.egg
 *.egg-info
+.env
 *.pyc
 .ropeproject
 .tags
