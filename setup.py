@@ -1,17 +1,9 @@
 #!/usr/bin/env python
 import os
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
 from simpletree import __version__, __project__, __license__
-
-
-PACKAGE_DATA = []
-
-for folder in ['templates']:
-    for root, dirs, files in os.walk(os.path.join(__project__, folder)):
-        for filename in files:
-            PACKAGE_DATA.append("%s/%s" % (root[len(__project__) + 1:], filename))
 
 
 def read(fname):
@@ -33,8 +25,7 @@ META_DATA = dict(
     author_email='horneds@gmail.com',
     url=' http://github.com/klen/djang-tree',
 
-    packages=find_packages(),
-    package_data = {'': PACKAGE_DATA},
+    packages=['simpletree'],
 
     install_requires = ('Django>=1.2'),
     test_suite = 'tests.run_tests',

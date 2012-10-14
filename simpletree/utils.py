@@ -2,7 +2,7 @@ from django.db import connection, transaction
 
 
 def commit_raw_sql(func):
-    """ Decorator for makes queries.
+    """ Execute the query returns.
     """
     def wrapper(instance, write=True):
         sql = func(instance)

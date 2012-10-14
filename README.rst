@@ -1,4 +1,4 @@
 Simpletree
 ==========
 
-Simple tree implementations for Django
+Fastest and simplest tree implementation for Django framework.
