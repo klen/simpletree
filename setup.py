@@ -23,7 +23,7 @@ META_DATA = dict(
 
     author='Kirill Klenov',
     author_email='horneds@gmail.com',
-    url=' http://github.com/klen/djang-tree',
+    url=' http://github.com/klen/simpletree',
 
     packages=['simpletree'],
 
