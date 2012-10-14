@@ -4,6 +4,8 @@ from .models import SimpleTree, MPTTTree, TBMP, TBNS
 
 
 def timeit(method):
+    """ Measure time of method's execution.
+    """
 
     def timed(*args, **kw):
         ts = time.time()
@@ -35,15 +37,15 @@ class Benchmark(object):
                 self._delete_last()
         test_deletion()
 
-    # def test_get(self):
-        # self._create_tree(cycles=7)
+    def test_get(self):
+        self._create_tree(cycles=7)
 
-        # @timeit
-        # def test_get_tree():
-            # root = self._get_root()
-            # for _ in xrange(100):
-                # self._get_tree(root)
-        # test_get_tree()
+        @timeit
+        def test_get_tree():
+            root = self._get_root()
+            for _ in xrange(100):
+                self._get_tree(root)
+        test_get_tree()
 
     def _create_tree(self, cycles=CYCLES):
         root = self._create_root(title='root1')
@@ -91,7 +93,6 @@ class SimpleTest(TestCase, Benchmark):
         return SimpleTree.objects.get(parent=None)
 
     def _get_tree(self, parent):
-        import ipdb; ipdb.set_trace() ### XXX BREAKPOINT
         return parent.get_tree()
 
 
@@ -112,6 +113,9 @@ class MPTTTest(TestCase, Benchmark):
     def _get_root(self):
         return MPTTTree.objects.get(parent=None)
 
+    def _get_tree(self, parent):
+        return list(parent.get_ancestors()) + list(parent.get_descendants(include_self=False))
+
 
 class TreeBeardMP(TestCase, Benchmark):
 
@@ -127,6 +131,12 @@ class TreeBeardMP(TestCase, Benchmark):
     def _delete_last(self):
         TBMP.objects.order_by('-id')[0].delete()
 
+    def _get_root(self):
+        return TBMP.get_root_nodes()[0]
+
+    def _get_tree(self, parent):
+        TBMP.get_tree(parent=parent)
+
 
 class TreeBeardNS(TreeBeardMP):
 
@@ -138,3 +148,9 @@ class TreeBeardNS(TreeBeardMP):
 
     def _delete_last(self):
         TBNS.objects.order_by('-id')[0].delete()
+
+    def _get_root(self):
+        return TBNS.get_root_nodes()[0]
+
+    def _get_tree(self, parent):
+        TBNS.get_tree(parent=parent)
